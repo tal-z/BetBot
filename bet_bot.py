@@ -13,9 +13,6 @@ from database_connection import Database
 
 load_dotenv()
 
-db = Database()
-
-
 CHANNEL_ID = os.getenv("TEST_CHANNEL_ID")
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
@@ -23,6 +20,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 bot = commands.Bot(command_prefix='$', intents=intents)
+db = Database()
 
 
 @bot.event
