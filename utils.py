@@ -29,4 +29,3 @@ def format_table(table_name, column_names, data):
         table_str += row_str + "\n" + divider
 
     return f"```{table_str}```"
-

@@ -7,26 +7,13 @@ import discord
 from discord.ext import commands, tasks
 
 from utils import format_table
+from converters import DateConverter
+from database_connection import Database
 
 
 load_dotenv()
 
-# Create a connection to SQLite database
-with sqlite3.connect('bets.db') as conn:
-    cursor = conn.cursor()
-
-    # Create a table to store bets
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS bets (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            question TEXT,
-            expiration_date TEXT,
-            yes_user TEXT,
-            no_user TEXT,
-            value INTEGER
-        )
-    ''')
-    conn.commit()
+db = Database()
 
 
 CHANNEL_ID = os.getenv("TEST_CHANNEL_ID")
@@ -46,24 +33,24 @@ async def on_ready():
 
 @bot.event
 async def on_disconnect():
-    conn.close()
+    db.conn.close()
     print(f'{bot.user} disconnected. Database connection closed.')
 
 
 @bot.command(name='place-bet')
-async def place_bet(ctx, question, expiration_date, yes_user, no_user, value):
+async def place_bet(ctx, question: str, expiration_date: DateConverter, yes_user: discord.User, no_user: discord.User, value: str):
     if not all([question, expiration_date, yes_user, no_user, value]):
         await ctx.send('Please provide all required arguments.')
         return
 
     try:
-        cursor.execute('''
-            INSERT INTO bets (question, expiration_date, yes_user, no_user, value)
+        db.cursor.execute('''
+            INSERT INTO bets (question, expiration_date, yes_user_id, no_user_id, value)
             VALUES (?, ?, ?, ?, ?)
-        ''', (question, expiration_date, yes_user, no_user, value))
-        conn.commit()
-        await ctx.send('Bet placed successfully!')
-    except sqlite3.Error as e:
+        ''', (question, expiration_date, yes_user.id, no_user.id, value))
+        db.conn.commit()
+        await ctx.send(f'Bet placed successfully for {yes_user.mention} and {no_user.mention}!')
+    except (discord.errors.NotFound, sqlite3.Error) as e:
         await ctx.send(f'Error placing bet: {e}')
 
 
@@ -72,29 +59,57 @@ async def view_bets(ctx):
     # Store bet in the SQLite database
     today = datetime.utcnow().strftime('%Y-%m-%d')
 
-    bets_query = cursor.execute('''
-        SELECT * FROM bets WHERE expiration_date >= ?
-    ''', (today,))
+    bets_query = db.cursor.execute('''
+        SELECT * FROM bets
+    ''')
     bets = bets_query.fetchall()
 
+    formatted_bets = []
+    for bet in bets:
+        formatted_bet = list(bet)
+        # Get the actual User objects from the mentions or IDs
+        yes_user = await bot.fetch_user(int(formatted_bet[3]))
+        no_user = await bot.fetch_user(int(formatted_bet[4]))
+        formatted_bet[3] = str(yes_user.display_name)
+        formatted_bet[4] = str(no_user.display_name)
+        formatted_bets.append(formatted_bet)
+
     column_names = ["id", "question", "expiration_date", "yes_user", "no_user", "value"]
-    table_str = format_table("Placed Bets", column_names, bets)
+    table_str = format_table("Placed Bets", column_names, formatted_bets)
     await ctx.send(table_str)
 
 @tasks.loop(hours=24)
 async def daily_check():
+    print(f'Checking for bets expiring today')
     channel = bot.get_channel(int(CHANNEL_ID))
     if channel is not None:
         today = datetime.utcnow().strftime('%Y-%m-%d')
-        bets_query = cursor.execute('''
+        bets_query = db.cursor.execute('''
             SELECT * FROM bets WHERE expiration_date = ?
         ''', (today,))
         expired_bets = bets_query.fetchall()
 
-        if expired_bets:
+        formatted_bets = []
+        for bet in expired_bets:
+            formatted_bet = list(bet)
+            # Get the actual User objects from the mentions or IDs
+            yes_user = await bot.fetch_user(int(formatted_bet[3]))
+            no_user = await bot.fetch_user(int(formatted_bet[4]))
+            formatted_bet[3] = str(yes_user.display_name)
+            formatted_bet[4] = str(no_user.display_name)
+            formatted_bets.append(formatted_bet)
+
+        if formatted_bets:
             column_names = ["id", "question", "expiration_date", "yes_user", "no_user", "value"]
-            table_str = format_table("Bets Expiring Today", column_names, expired_bets)
+            table_str = format_table("Bets Expiring Today", column_names, formatted_bets)
             await channel.send(table_str)
+
+            for id, question, expiration_date, yes_user_id, no_user_id, value in expired_bets:
+                # Get the actual User objects from the mentions or IDs
+                yes_user = await bot.fetch_user(int(yes_user_id))
+                no_user = await bot.fetch_user(int(no_user_id))
+                message_str = f"Hey {yes_user.mention} and {no_user.mention}! Your bet on the question **'{question}'** expires today. Somebody owes somebody else {value}'"
+                await channel.send(message_str)
 
 
 @daily_check.before_loop
