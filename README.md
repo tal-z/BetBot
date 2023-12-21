@@ -4,7 +4,7 @@
 
 BetBot is a discord bot for keeping track of casual bets between friends within a Discord server. 
 Users can place bets by providing details such as the question, expiration date, involved users, and the bet value. 
-When a bet expires, the bot sends a message to a specified channel to notify the participants.
+When a bet expires, the bot sends a message to a specified channel to notify the participants so that they may settle up.
 
 ## Features
 
@@ -33,7 +33,7 @@ When a bet expires, the bot sends a message to a specified channel to notify the
 5. **Run the Bot:**
    - Activate the virtual environment: `pipenv shell`
    - Execute the bot script using: `python bet_bot.py`
-
+   
 ## Commands
 
 - **Place Bet:**
@@ -43,6 +43,10 @@ When a bet expires, the bot sends a message to a specified channel to notify the
 - **View Bets:**
   - Syntax: `$view-bets`
   - Example: `$view-bets`
+
+## Running tests
+
+From your project root, you can run `python -m unittest tests.test_place_bet`
 
 ## Contributions and Issues
 
