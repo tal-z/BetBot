@@ -15,7 +15,8 @@ class Database:
                 expiration_date DATETIME,
                 yes_user_id TEXT,
                 no_user_id TEXT,
-                value INTEGER
+                value INTEGER,
+                cancel_requested TEXT
             )
         ''')
         self.conn.commit()

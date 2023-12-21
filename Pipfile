@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 discord-py = "2.3.2"
+tzdata = ""
 
 [dev-packages]
 python-dotenv = ""
