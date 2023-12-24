@@ -67,8 +67,12 @@ From the project root, run `python -m unittest discover tests`
 8. Install pipenv: `pip3 install pipenv`
 9. Install dependencies: `pipenv --python python3.9 install --dev`
 10. Update environment variables 
-11. Active pipenv environment: `pipenv shell`
-12. Start the bot: `python3 bet_bot/bet_bot.py`
+11. Install tmux: `sudo yum install tmux` 
+12. Active pipenv environment: `pipenv shell`
+13. Start new tmux process: `tmux new -s BetBot`
+14. Start the bot: `python3 bet_bot/bet_bot.py`
+15. Exit the tmux shell by entering `ctrl+b` followed by `d` on your keyboard
+16. To re-attach: `tmux attach` or `tmux attach -d -t BetBot` if there is more than one process running
 
 ## Contributions and Issues
 
