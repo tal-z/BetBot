@@ -14,7 +14,12 @@ from daily_expiring_bets_check import _daily_expiring_bets_check
 
 load_dotenv()
 
-CHANNEL_ID = os.getenv("TEST_CHANNEL_ID")
+ENVIRONMENT = os.getenv("ENVIRONMENT")
+if ENVIRONMENT == "PRODUCTION":
+    CHANNEL_ID = os.getenv("PRODUCTION_CHANNEL_ID")
+else:
+    CHANNEL_ID = os.getenv("TEST_CHANNEL_ID")
+
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 intents = discord.Intents.default()
@@ -29,6 +34,7 @@ class BetBot(commands.Bot):
         @self.event
         async def on_ready():
             print(f'We have logged in as {self.user}')
+            self.send_welcome_message.start()
             self.daily_expiring_bets_check.start()
 
         @self.event
@@ -85,6 +91,22 @@ class BetBot(commands.Bot):
     @tasks.loop(hours=24)
     async def daily_expiring_bets_check(self):
         await _daily_expiring_bets_check(self, CHANNEL_ID)
+
+    @tasks.loop(count=1)
+    async def send_welcome_message(self):
+        channel = self.get_channel(int(CHANNEL_ID))
+        if channel is not None:
+            await channel.send(
+                "📢 Attention @everyone! BetBot is here! 📢\n\n"
+                "The days of impetuous wagering on Discord will soon be behind us "
+                "(looking at you <@858195775161892895>. 😜💸 \n\n"
+                "I'm here to keep you all honest, and help you put your 💰 where your 👄 is. "
+                "Want to challenge your friend to a bet? " 
+                "I'll keep track of it for you, and then send you both a message when the bet comes due. 📆🤑 \n\n"
+                "👉  Type `$help` to see what BetBot can do for you. May luck be on your side! 🍀\n\n🌟 🎲 💥 🃏 🎉"
+            )
+
+        self.send_welcome_message.stop()
 
 
 if __name__ == "__main__":
