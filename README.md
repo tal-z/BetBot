@@ -37,8 +37,12 @@ When a bet expires, the bot sends a message to a specified channel to notify the
 ## Commands
 
 - **Place Bet:**
-  - Syntax: `$place-bet <question> <expiration_date> <yes_user> <no_user> <value>`
+  - Syntax: `$place-bet <predicate> <expiration_date> <challenged_user> <value>`
   - Example: `$place-bet "Will it rain tomorrow?" "2023-12-31" @user1 @user2 50`
+
+- **Accept Bet:**
+  - Syntax: `$accept-bet <bet_id>`
+  - Example: `$accept-bet 1>`
 
 - **View Bets:**
   - Syntax: `$view-bets`
@@ -46,7 +50,22 @@ When a bet expires, the bot sends a message to a specified channel to notify the
 
 ## Running tests
 
-From your project root, you can run `python -m unittest discover tests`
+From the project root, run `python -m unittest discover tests`
+
+## Deployment
+1. Spin up EC2 instance
+2. Connect to EC2 instance from local: `ssh -i <path-to-pem-file> ec2-user@<public-ip-address>`
+3. Update packages: `sudo yum update`
+4. Install python: `sudo yum install python3-pip`
+5. Install git: `sudo yum install git`
+6. Clone repo: `git clone https://github.com/tal-z/BetBot.git`
+9. `cd BetBot`
+7. Install pipenv: `pip3 install pipenv`
+7. Install dependencies: `pipenv install`
+8. Active pipenv environment: `pipenv shell`
+8. Update environment variables 
+10. `python bet_bot.py`
+
 
 ## Contributions and Issues
 

@@ -1,7 +1,7 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from utils import format_table
+from view_bets import format_table
 
 
 async def _daily_expiring_bets_check(self, CHANNEL_ID):
