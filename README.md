@@ -61,10 +61,10 @@ From the project root, run `python -m unittest discover tests`
 6. Clone repo: `git clone https://github.com/tal-z/BetBot.git`
 9. `cd BetBot`
 7. Install pipenv: `pip3 install pipenv`
-7. Install dependencies: `pipenv install`
+7. Install dependencies: `pipenv --python python3.9 install --dev`
+8. Update environment variables
 8. Active pipenv environment: `pipenv shell`
-8. Update environment variables 
-10. `python bet_bot.py`
+10. `python3 bet_bot/bet_bot.py`
 
 
 ## Contributions and Issues
