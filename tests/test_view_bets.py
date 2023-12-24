@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import AsyncMock
 
-from bet_bot.view_bets import _view_bets
+from bet_bot.view_bets import _view_bets, format_table
 
 from test_cases import BetBotTestCase
 
@@ -28,16 +28,29 @@ class TestViewBetsFunction(BetBotTestCase):
             mock_ctx,
         )
 
-        expected_table_str = (
-            '```Placed Bets\n'
-            '_________________________________________________________________________________________________________________________________________________\n'
-            'id  | predicate             | expiration_date  | challenging_user  | challenged_user  | value  | challenge_accepted  | cancellation_requested  | \n'
-            '_________________________________________________________________________________________________________________________________________________\n'
-            f'{bet_id}  | The sky will be blue  | 2023-12-21       | ChallengingUser   | ChallengedUser   | $10    | None                | None                    | \n'
-            '_________________________________________________________________________________________________________________________________________________\n```')
+        table_name = "Placed Bets"
+        header_row = [
+            "id",
+            "predicate",
+            "expiration_date",
+            "challenging_user",
+            "challenged_user",
+            "value",
+            "challenge_accepted",
+            "cancellation_requested",
+        ]
+        data_rows = [(
+                bet_id,
+                predicate,
+                self.date_str,
+                "ChallengingUser",
+                "ChallengedUser",
+                "$10",
+                None,
+                None,
+        )]
+        expected_table_str = format_table(table_name, header_row, data_rows)
         mock_ctx.send.assert_called_once_with(expected_table_str)
-
-    # Additional test cases can be added for different scenarios, such as empty bets, etc.
 
 
 if __name__ == '__main__':

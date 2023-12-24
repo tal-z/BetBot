@@ -25,7 +25,18 @@ async def _cancel_bet(self, ctx, bet_id):
             )
 
             # Check if bet cancellation has already been requested
-            cancel_requested_by_id = bet[6]
+            bet_was_accepted = bet[6]
+            cancel_requested_by_id = bet[7]
+            if not bet_was_accepted:
+                # cancellation approval
+                self.db.cursor.execute('DELETE FROM bets WHERE id = ?', (bet_id,))
+                self.db.conn.commit()
+                await ctx.send(
+                    f'Bet {bet_id}: **"{bet[1]}"** was never accepted, and has now been successfully cancelled. '
+                    f'{cancelling_user.mention} and {other_user.mention} are off the hook'
+                )
+                return
+
             if not cancel_requested_by_id:
                 # initial cancellation request
                 self.db.cursor.execute('UPDATE bets SET cancel_requested = ? WHERE id = ?',

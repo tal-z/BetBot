@@ -22,7 +22,6 @@ class BetBotTestCase(unittest.IsolatedAsyncioTestCase):
 
         self.date_str = "2023-12-21"
 
-
     async def asyncTearDown(self):
         # Clean up any resources or objects here
         self.clear_database()
@@ -32,11 +31,9 @@ class BetBotTestCase(unittest.IsolatedAsyncioTestCase):
         self.bot.db.cursor.execute("""DELETE FROM bets""")
         self.bot.db.conn.commit()
 
-
     async def _place_bet_challenge(self, predicate, value):
         mock_ctx = AsyncMock()
         mock_ctx.author = self.challenging_user
-        mock_ctx.send = AsyncMock()
 
         await _place_bet(
             self.bot,
