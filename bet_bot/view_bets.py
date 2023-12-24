@@ -44,8 +44,6 @@ async def _view_bets(self, ctx):
                 ''')
     bets = bets_query.fetchall()
 
-    print(bets)
-
     formatted_bets = []
     for bet in bets:
         formatted_bet = list(bet)
