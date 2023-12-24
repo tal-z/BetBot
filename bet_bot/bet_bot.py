@@ -34,7 +34,7 @@ class BetBot(commands.Bot):
         @self.event
         async def on_ready():
             print(f'We have logged in as {self.user}')
-            self.send_welcome_message.start()
+            # self.send_welcome_message.start()
             self.daily_expiring_bets_check.start()
 
         @self.event
