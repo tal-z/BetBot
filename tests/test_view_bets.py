@@ -36,8 +36,7 @@ class TestViewBetsFunction(BetBotTestCase):
             "challenging_user",
             "challenged_user",
             "value",
-            "challenge_accepted",
-            "cancellation_requested",
+            "active",
         ]
         data_rows = [(
                 bet_id,
@@ -46,7 +45,6 @@ class TestViewBetsFunction(BetBotTestCase):
                 "ChallengingUser",
                 "ChallengedUser",
                 "$10",
-                None,
                 None,
         )]
         expected_table_str = format_table(table_name, header_row, data_rows)

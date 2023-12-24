@@ -32,9 +32,19 @@ def format_table(table_name, column_names, data):
 
 async def _view_bets(self, ctx):
     bets_query = self.db.cursor.execute('''
-                    SELECT * FROM bets
+                    SELECT 
+                        id,
+                        predicate,
+                        expiration_date,
+                        challenging_user_id,
+                        challenged_user_id,
+                        value,
+                        challenge_accepted
+                     FROM bets
                 ''')
     bets = bets_query.fetchall()
+
+    print(bets)
 
     formatted_bets = []
     for bet in bets:
@@ -53,8 +63,7 @@ async def _view_bets(self, ctx):
         "challenging_user",
         "challenged_user",
         "value",
-        "challenge_accepted",
-        "cancellation_requested",
+        "active",
     ]
     table_str = format_table("Placed Bets", column_names, formatted_bets)
     await ctx.send(table_str)
