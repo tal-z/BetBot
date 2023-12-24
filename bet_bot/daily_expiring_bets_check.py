@@ -42,5 +42,9 @@ async def _daily_expiring_bets_check(self, CHANNEL_ID):
                 # Get the actual User objects from the mentions or IDs
                 yes_user = await self.fetch_user(int(yes_user_id))
                 no_user = await self.fetch_user(int(no_user_id))
-                message_str = f"Hey {yes_user.mention} and {no_user.mention}! Your bet on the question **'{question}'** expires today. Somebody owes somebody else {value}'"
+                message_str = (
+                    f"Hey {yes_user.mention} and {no_user.mention}! "
+                    f"Your bet on the question **'{question}'** expires today. "
+                    f"Somebody owes somebody else {value}'"
+                )
                 await channel.send(message_str)
