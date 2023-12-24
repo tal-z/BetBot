@@ -10,7 +10,16 @@ async def _daily_expiring_bets_check(self, CHANNEL_ID):
     if channel is not None:
         today = datetime.now(tz=ZoneInfo("US/Eastern")).strftime('%Y-%m-%d')
         bets_query = self.db.cursor.execute('''
-                    SELECT * FROM bets WHERE expiration_date = ? AND challenge_accepted = TRUE
+                    SELECT 
+                        id,
+                        predicate,
+                        expiration_date,
+                        challenging_user_id,
+                        challenged_user_id,
+                        value,
+                        challenge_accepted 
+                    FROM bets 
+                    WHERE expiration_date = ? AND challenge_accepted = TRUE
                 ''', (today,))
         expired_bets = bets_query.fetchall()
 
@@ -25,7 +34,7 @@ async def _daily_expiring_bets_check(self, CHANNEL_ID):
             formatted_bets.append(formatted_bet)
 
         if formatted_bets:
-            column_names = ["id", "question", "expiration_date", "yes_user", "no_user", "value", "cancel_requested"]
+            column_names = ["id", "predicate", "expires_on", "challenging_user", "challenged_user", "value", "active"]
             table_str = format_table("Bets Expiring Today", column_names, formatted_bets)
             await channel.send(table_str)
 
