@@ -55,9 +55,9 @@ class BetBot(commands.Bot):
     async def on_command_error(self, ctx, error):
         if isinstance(error, MissingRequiredArgument):
             await ctx.send(f"Error: {error}")
-        else:
-            # Handle other errors if needed
-            await ctx.send(f"Unhandled Server Error: {error} <@703583686138003581>, please take a look.")
+        #else:
+        #    # Handle other errors if needed
+        #    await ctx.send(f"Unhandled Server Error: {error} <@703583686138003581>, please take a look.")
 
     @tasks.loop(hours=24)
     async def daily_expiring_bets_check(self):
