@@ -1,4 +1,4 @@
-from bet_bot.utils import format_table
+from utils import format_table
 
 
 async def _view_bets(self, ctx):
