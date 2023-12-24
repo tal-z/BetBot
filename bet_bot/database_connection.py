@@ -11,11 +11,12 @@ class Database:
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS bets (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                question TEXT,
+                predicate TEXT,
                 expiration_date DATETIME,
-                yes_user_id TEXT,
-                no_user_id TEXT,
-                value INTEGER,
+                challenging_user_id TEXT,
+                challenged_user_id TEXT,
+                value TEXT,
+                challenge_accepted BOOLEAN,
                 cancel_requested TEXT
             )
         ''')

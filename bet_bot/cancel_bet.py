@@ -6,7 +6,7 @@ async def _cancel_bet(self, ctx, bet_id):
         # Check if the user is part of the bet
         user_id = ctx.author.id
         bet_query = self.db.cursor.execute(
-            'SELECT * FROM bets WHERE id = ? AND (yes_user_id = ? OR no_user_id = ?)',
+            'SELECT * FROM bets WHERE id = ? AND (challenging_user_id = ? OR challenged_user_id = ?)',
             (bet_id, user_id, user_id)
         )
         bet = bet_query.fetchone()

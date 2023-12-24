@@ -1,5 +1,4 @@
-from datetime import datetime
-from utils import format_table
+from bet_bot.utils import format_table
 
 
 async def _view_bets(self, ctx):
@@ -18,7 +17,15 @@ async def _view_bets(self, ctx):
         formatted_bet[4] = str(no_user.display_name)
         formatted_bets.append(formatted_bet)
 
-    column_names = ["id", "question", "expiration_date", "yes_user", "no_user", "value",
-                    "cancellation_requested"]
+    column_names = [
+        "id",
+        "predicate",
+        "expiration_date",
+        "challenging_user",
+        "challenged_user",
+        "value",
+        "challenge_accepted",
+        "cancellation_requested",
+    ]
     table_str = format_table("Placed Bets", column_names, formatted_bets)
     await ctx.send(table_str)

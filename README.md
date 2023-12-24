@@ -46,7 +46,7 @@ When a bet expires, the bot sends a message to a specified channel to notify the
 
 ## Running tests
 
-From your project root, you can run `python -m unittest tests.test_place_bet`
+From your project root, you can run `python -m unittest discover tests`
 
 ## Contributions and Issues
 
