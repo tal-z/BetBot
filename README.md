@@ -48,6 +48,10 @@ When a bet expires, the bot sends a message to a specified channel to notify the
   - Syntax: `$view-bets`
   - Example: `$view-bets`
 
+- **Cancel Bet:**
+  - Syntax: `$cancel-bet <bet_id>`
+  - Example: `$cancel-bet 1`
+
 ## Running tests
 
 From the project root, run `python -m unittest discover tests`
@@ -59,13 +63,12 @@ From the project root, run `python -m unittest discover tests`
 4. Install python: `sudo yum install python3-pip`
 5. Install git: `sudo yum install git`
 6. Clone repo: `git clone https://github.com/tal-z/BetBot.git`
-9. `cd BetBot`
-7. Install pipenv: `pip3 install pipenv`
-7. Install dependencies: `pipenv --python python3.9 install --dev`
-8. Update environment variables
-8. Active pipenv environment: `pipenv shell`
-10. `python3 bet_bot/bet_bot.py`
-
+7. cd into the repo: `cd BetBot`
+8. Install pipenv: `pip3 install pipenv`
+9. Install dependencies: `pipenv --python python3.9 install --dev`
+10. Update environment variables 
+11. Active pipenv environment: `pipenv shell`
+12. Start the bot: `python3 bet_bot/bet_bot.py`
 
 ## Contributions and Issues
 

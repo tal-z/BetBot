@@ -36,19 +36,43 @@ class BetBot(commands.Bot):
             self.db.conn.close()
             print(f'{self.user} disconnected. Database connection closed.')
 
-        @self.command(name='place-bet')
+        @self.command(
+            name='place-bet',
+            help=(
+                'Challenge another person to a bet. '
+                'Syntax: `$place-bet <predicate> <expiration_date> <challenged_user> <value>`'
+            )
+        )
         async def place_bet(ctx, predicate: str, expiration_date: DateConverter, challenged_user: discord.User, value: str):
             await _place_bet(self, ctx, predicate, expiration_date, challenged_user, value)
 
-        @self.command(name='accept-bet')
+        @self.command(
+            name='accept-bet',
+            help=(
+                'Accept a bet from another person who challenged you. '
+                'Syntax: `$accept-bet <bet_id>`'
+            )
+        )
         async def accept_bet(ctx, bet_id: int):
             await _accept_bet(self, ctx, bet_id)
 
-        @self.command(name='view-bets')
+        @self.command(
+            name='view-bets',
+            help=(
+                    'View all active bets and open challenges.'
+                    'Syntax: `$view-bets`'
+            )
+        )
         async def view_bets(ctx):
             await _view_bets(self, ctx)
 
-        @self.command(name='cancel-bet')
+        @self.command(
+            name='cancel-bet',
+            help=(
+                    "Submit a request to cancel a bet, or confirm another person's request to cancel your bet."
+                    "Syntax: `$cancel-bet <bet_id>`"
+            )
+        )
         async def cancel_bet(ctx, bet_id: int):
             await _cancel_bet(self, ctx, bet_id)
 
