@@ -5,14 +5,24 @@
 BetBot is a discord bot for keeping track of casual bets between friends within a Discord server. 
 Users can place bets by providing details such as the question, expiration date, involved users, and the bet value. 
 When a bet expires, the bot sends a message to a specified channel to notify the participants so that they may settle up.
+   
+## Commands
 
-## Features
+- **Place Bet:**
+  - Syntax: `$place-bet <predicate> <expiration_date> <challenged_user> <value>`
+  - Example: `$place-bet "Will it rain tomorrow?" "2023-12-31" @user1 @user2 50`
 
-- **Place Bet:** Users can place bets using the `$place-bet` command, providing details like the question, expiration date, involved users, and the bet value.
+- **Accept Bet:**
+  - Syntax: `$accept-bet <bet_id>`
+  - Example: `$accept-bet 1>`
 
-- **View Bets:** The `$view-bets` command allows users to see a list of bets that are still active, i.e., those whose expiration date is on or after the current date.
+- **View Bets:**
+  - Syntax: `$view-bets`
+  - Example: `$view-bets`
 
-- **Daily Check:** The bot automatically checks for bets expiring on the current day and notifies a specified channel about the details of these expiring bets.
+- **Cancel Bet:**
+  - Syntax: `$cancel-bet <bet_id>`
+  - Example: `$cancel-bet 1`
 
 ## Setup
 
