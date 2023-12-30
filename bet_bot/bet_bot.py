@@ -33,8 +33,8 @@ intents.message_content = True
 class BetBot(commands.Bot):
     def __init__(self, db_name='bets.db'):
         super().__init__(command_prefix='$', intents=intents)
-        self.db = Database(db_name=self.db_name)
-        logger.info(f'Connected to db {self.db_name}')
+        self.db = Database(db_name=db_name)
+        logger.info(f'Connected to {db_name}')
 
         @self.event
         async def on_ready():
