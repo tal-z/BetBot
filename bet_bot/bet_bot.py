@@ -23,7 +23,7 @@ else:
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(filename='bot_logs.log', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 intents = discord.Intents.default()
