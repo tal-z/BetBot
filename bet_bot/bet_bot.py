@@ -1,4 +1,5 @@
 import os
+import logging
 
 from dotenv import load_dotenv
 import discord
@@ -22,6 +23,9 @@ else:
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 intents = discord.Intents.default()
 intents.message_content = True
 
@@ -29,20 +33,18 @@ intents.message_content = True
 class BetBot(commands.Bot):
     def __init__(self, db_name='bets.db'):
         super().__init__(command_prefix='$', intents=intents)
-        self.db_name = db_name
+        self.db = Database(db_name=self.db_name)
+        logger.info(f'Connected to db {self.db_name}')
 
         @self.event
         async def on_ready():
-            print(f'We have logged in as {self.user}')
-            self.db = Database(db_name=self.db_name)
-            print(f'Connected to db {self.db_name}')
+            logger.info(f'We have logged in as {self.user}')
             # self.send_welcome_message.start()
             self.daily_expiring_bets_check.start()
 
         @self.event
         async def on_disconnect():
-            self.db.conn.close()
-            print(f'{self.user} disconnected. Database connection closed.')
+            logger.info(f'{self.user} disconnected.')
 
         @self.command(
             name='place-bet',
@@ -88,7 +90,7 @@ class BetBot(commands.Bot):
         if isinstance(error, MissingRequiredArgument):
             await ctx.send(f"Error: {error}")
         else:
-            print(error)
+            logger.info(error)
 
     @tasks.loop(hours=24)
     async def daily_expiring_bets_check(self):
