@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import AsyncMock
 
-from bet_bot.database_connection import Database
+from bet_bot.database_connection import DatabaseConnection
 from bet_bot.place_bet import _place_bet
 from bet_bot.accept_bet import _accept_bet
 
@@ -10,7 +10,7 @@ class BetBotTestCase(unittest.IsolatedAsyncioTestCase):
 
     async def asyncSetUp(self):
         self.bot = AsyncMock()
-        self.bot.db = Database(db_name="test_bets.db")
+        self.bot.db = DatabaseConnection(db_name="test_bets.db")
 
         self.challenging_user = AsyncMock()
         self.challenging_user.id = "1"

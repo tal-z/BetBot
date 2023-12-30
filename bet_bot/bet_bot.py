@@ -6,7 +6,7 @@ import discord
 from discord.ext import commands, tasks
 from discord.ext.commands import MissingRequiredArgument
 
-from database_connection import Database
+from database_connection import DatabaseConnection
 from place_bet import _place_bet, DateConverter
 from accept_bet import _accept_bet
 from view_bets import _view_bets
@@ -33,7 +33,7 @@ intents.message_content = True
 class BetBot(commands.Bot):
     def __init__(self, db_name='bets.db'):
         super().__init__(command_prefix='$', intents=intents)
-        self.db = Database(db_name=db_name)
+        self.db = DatabaseConnection(db_name=db_name)
         logger.info(f'Connected to {db_name}')
 
         @self.event

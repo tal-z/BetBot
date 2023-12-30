@@ -1,7 +1,8 @@
 # database.py
 import sqlite3
 
-class Database:
+
+class DatabaseConnection:
     def __init__(self, db_name='bets.db'):
         self.conn = sqlite3.connect(db_name)
         self.cursor = self.conn.cursor()
