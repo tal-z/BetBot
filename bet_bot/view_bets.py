@@ -26,7 +26,7 @@ def format_table(table_name, column_names, data):
             col_value = str(col_value)
             whitespace = column_widths[col_idx] - len(col_value)
             row_str += col_value + (" " * whitespace) + "| "
-        table_str += row_str + "\n" + divider
+        table_str += row_str + "\n"
 
     return table_str
 
