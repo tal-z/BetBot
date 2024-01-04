@@ -6,19 +6,14 @@ def format_table(table_name, column_names, data):
         for row in data:
             column_value_len = len(str(row[col_idx]))
             column_widths[col_idx] = max(column_value_len + 2, column_widths[col_idx])
-
-    divider = (
-            "_" * (sum(column_widths.values()) + len(column_names)*2)
-            + "\n"
-    )
-    table_str = f"{table_name}\n{divider}"
+    table_str = f"{table_name}\n"
 
     header_str = ""
     for col_idx, col_name in enumerate(column_names):
         whitespace = column_widths[col_idx] - len(col_name)
         header_str += f"{col_name}" + (" " * whitespace) + "| "
 
-    table_str += f"{header_str}" + "\n" + divider
+    table_str += f"{header_str}" + "\n"
 
     for row in data:
         row_str = ""
@@ -66,13 +61,9 @@ async def _view_bets(self, ctx):
         formatted_bets.append(formatted_bet)
 
     table_str = format_table("Placed Bets", column_names, formatted_bets)
-
-    if len(table_str) < 2000:
-        await ctx.send(f"```{table_str}```")
-    else:
-        lines = table_str.split("\n")
-        for line in lines:
-            await ctx.send(f"```{line}```")
+    lines = table_str.split("\n")
+    for line in lines:
+        await ctx.send(f"```{line}```")
 
 
 
