@@ -1,4 +1,5 @@
-
+from datetime import datetime
+from zoneinfo import ZoneInfo
 def format_table(table_name, column_names, data):
     column_widths = {}
     for col_idx, column in enumerate(column_names):
@@ -36,6 +37,7 @@ async def _view_bets(self, ctx):
         "value",
         "active",
     ]
+    today = datetime.now(tz=ZoneInfo("US/Eastern")).strftime('%Y-%m-%d')
 
     bets_query = self.db.cursor.execute('''
         SELECT 
@@ -47,7 +49,8 @@ async def _view_bets(self, ctx):
             value,
             challenge_accepted
          FROM bets
-    ''')
+         WHERE expiration_date >= ? 
+    ''', (today,))
     bets = bets_query.fetchall()
 
     formatted_bets = []
