@@ -28,20 +28,31 @@ def format_table(table_name, column_names, data):
             row_str += col_value + (" " * whitespace) + "| "
         table_str += row_str + "\n" + divider
 
-    return f"```{table_str}```"
+    return table_str
+
 
 async def _view_bets(self, ctx):
+    column_names = [
+        "id",
+        "predicate",
+        "expiration_date",
+        "challenging_user",
+        "challenged_user",
+        "value",
+        "active",
+    ]
+
     bets_query = self.db.cursor.execute('''
-                    SELECT 
-                        id,
-                        predicate,
-                        expiration_date,
-                        challenging_user_id,
-                        challenged_user_id,
-                        value,
-                        challenge_accepted
-                     FROM bets
-                ''')
+        SELECT 
+            id,
+            predicate,
+            expiration_date,
+            challenging_user_id,
+            challenged_user_id,
+            value,
+            challenge_accepted
+         FROM bets
+    ''')
     bets = bets_query.fetchall()
 
     formatted_bets = []
@@ -54,14 +65,14 @@ async def _view_bets(self, ctx):
         formatted_bet[4] = str(no_user.display_name)
         formatted_bets.append(formatted_bet)
 
-    column_names = [
-        "id",
-        "predicate",
-        "expiration_date",
-        "challenging_user",
-        "challenged_user",
-        "value",
-        "active",
-    ]
     table_str = format_table("Placed Bets", column_names, formatted_bets)
-    await ctx.send(table_str)
+
+    if len(table_str) < 2000:
+        await ctx.send(f"```{table_str}```")
+    else:
+        lines = table_str.split("\n")
+        for line in lines:
+            await ctx.send(f"```{line}```")
+
+
+
